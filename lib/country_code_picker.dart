@@ -7,8 +7,18 @@ import 'country.dart';
 import 'functions.dart';
 
 const TextStyle _defaultItemTextStyle = const TextStyle(fontSize: 16);
-const TextStyle _defaultSearchInputStyle = const TextStyle(fontSize: 16);
-const String _kDefaultSearchHintText = 'Search country name, code';
+const TextStyle _defaultItemCodeStyle = const TextStyle(
+  fontSize: 16,
+  color: Color(0xFFA1A7A2),
+);
+const TextStyle _defaultSearchInputStyle = const TextStyle(
+  backgroundColor: Colors.transparent,
+  color: Color(0xFF121212),
+  fontSize: 16.0,
+  fontWeight: FontWeight.w400,
+  height: 1.65,
+);
+const String _kDefaultSearchHintText = 'Search';
 const String countryCodePackageName = 'country_calling_code_picker';
 
 class CountryPickerWidget extends StatefulWidget {
@@ -17,6 +27,9 @@ class CountryPickerWidget extends StatefulWidget {
 
   /// [itemTextStyle] can be used to change the TextStyle of the Text in ListItem. Default is [_defaultItemTextStyle]
   final TextStyle itemTextStyle;
+
+  /// [itemCodeStyle] can be used to change the TextStyle of the Text in ListItem. Default is [_defaultItemCodeStyle]
+  final TextStyle itemCodeStyle;
 
   /// [searchInputStyle] can be used to change the TextStyle of the Text in SearchBox. Default is [searchInputStyle]
   final TextStyle searchInputStyle;
@@ -40,10 +53,11 @@ class CountryPickerWidget extends StatefulWidget {
     Key? key,
     this.onSelected,
     this.itemTextStyle = _defaultItemTextStyle,
+    this.itemCodeStyle = _defaultItemCodeStyle,
     this.searchInputStyle = _defaultSearchInputStyle,
     this.searchInputDecoration,
     this.searchHintText = _kDefaultSearchHintText,
-    this.flagIconSize = 32,
+    this.flagIconSize = 24,
     this.showSeparator = false,
     this.focusSearchBox = false,
   }) : super(key: key);
@@ -53,6 +67,8 @@ class CountryPickerWidget extends StatefulWidget {
 }
 
 class _CountryPickerWidgetState extends State<CountryPickerWidget> {
+  FocusNode _focusNode = FocusNode();
+  Color _borderColor = Colors.transparent;
   List<Country> _list = [];
   List<Country> _filteredList = [];
   TextEditingController _controller = new TextEditingController();
@@ -93,6 +109,13 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
         currentFocus.unfocus();
       }
     });
+    _focusNode.addListener(() {
+      setState(() {
+        _borderColor = _focusNode.hasFocus
+            ? Colors.black.withOpacity(0.15)
+            : Colors.transparent;
+      });
+    });
     loadList();
     super.initState();
   }
@@ -112,7 +135,8 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
             (element) => element.callingCode == country.callingCode);
         _list.insert(0, country);
       }
-    } catch (e) {} finally {
+    } catch (e) {
+    } finally {
       setState(() {
         _filteredList = _list.map((e) => e).toList();
         _isLoading = false;
@@ -124,20 +148,42 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SizedBox(
-          height: 16,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 24, right: 24),
+        Container(
+          margin: const EdgeInsets.only(left: 16, right: 16),
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          decoration: BoxDecoration(
+              color: Color(0xFFF7F7F5),
+              borderRadius: BorderRadius.all(Radius.circular(12.0)),
+              border: Border.all(
+                color: _borderColor,
+                width: 1.0,
+              )),
           child: TextField(
+            focusNode: _focusNode,
             style: widget.searchInputStyle,
             autofocus: widget.focusSearchBox,
             decoration: widget.searchInputDecoration ??
                 InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: _controller.text.isNotEmpty
+                        ? Color(0xFF121212)
+                        : Color(0xFFA7A7A7),
+                    size: 24,
+                  ),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 32,
+                  ),
                   suffixIcon: Visibility(
                     visible: _controller.text.isNotEmpty,
                     child: InkWell(
-                      child: Icon(Icons.clear),
+                      child: Icon(
+                        Icons.clear,
+                        color: _controller.text.isNotEmpty
+                            ? Color(0xFF121212)
+                            : Color(0xFFA7A7A7),
+                        size: 20,
+                      ),
                       onTap: () => setState(() {
                         _controller.clear();
                         _filteredList.clear();
@@ -145,12 +191,19 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                       }),
                     ),
                   ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(),
-                    borderRadius: BorderRadius.circular(30),
+                  border: UnderlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                    borderSide: BorderSide(
+                      width: 0.0,
+                      style: BorderStyle.none,
+                    ),
                   ),
-                  contentPadding:
-                      EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+                  contentPadding: EdgeInsets.only(
+                    left: 8,
+                    right: 8,
+                    top: 8,
+                    bottom: 8,
+                  ),
                   hintText: widget.searchHintText,
                 ),
             textInputAction: TextInputAction.done,
@@ -177,7 +230,11 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                       },
                       child: Container(
                         padding: EdgeInsets.only(
-                            bottom: 12, top: 12, left: 24, right: 24),
+                          bottom: 12,
+                          top: 12,
+                          left: 16,
+                          right: 16,
+                        ),
                         child: Row(
                           children: <Widget>[
                             Image.asset(
@@ -186,13 +243,18 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                               width: widget.flagIconSize,
                             ),
                             SizedBox(
-                              width: 16,
+                              width: 8,
                             ),
                             Expanded(
                                 child: Text(
-                              '${_filteredList[index].callingCode} ${_filteredList[index].name}',
+                              '${_filteredList[index].name}',
                               style: widget.itemTextStyle,
                             )),
+                            Spacer(),
+                            Text(
+                              '${_filteredList[index].callingCode} ',
+                              style: widget.itemCodeStyle,
+                            ),
                           ],
                         ),
                       ),
