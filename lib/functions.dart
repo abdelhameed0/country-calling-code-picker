@@ -27,27 +27,29 @@ Future<Country> getDefaultCountry(BuildContext context) async {
       return list.first;
     }
     return list.firstWhere((element) =>
-    element.countryCode.toLowerCase() == countryCode.toLowerCase());
+        element.countryCode.toLowerCase() == countryCode.toLowerCase());
   } catch (e) {
     return list.first;
   }
 }
 
 ///This function returns an country whose [countryCode] matches with the passed one.
-Future<Country?> getCountryByCountryCode(BuildContext context,
-    String countryCode) async {
+Future<Country?> getCountryByCountryCode(
+    BuildContext context, String countryCode) async {
   final list = await getCountries(context);
   return list.firstWhere((element) => element.countryCode == countryCode);
 }
 
-Future<Country?> showCountryPickerSheet(BuildContext context,
-    {Widget? title,
-      Widget? cancelWidget,
-      double cornerRadius: 35,
-      bool focusSearchBox: false,
-      double heightFactor: 0.9}) {
-  assert(heightFactor <= 0.9 && heightFactor >= 0.4,
-  'heightFactor must be between 0.4 and 0.9');
+Future<Country?> showCountryPickerSheet(
+  BuildContext context, {
+  Widget? title,
+  Widget? cancelWidget,
+  double cornerRadius = 35,
+  bool focusSearchBox = false,
+  double heightFactor = 0.95,
+}) {
+  assert(heightFactor <= 0.95 && heightFactor >= 0.4,
+      'heightFactor must be between 0.4 and 0.9');
   return showModalBottomSheet<Country?>(
       context: context,
       isScrollControlled: true,
@@ -57,10 +59,7 @@ Future<Country?> showCountryPickerSheet(BuildContext context,
               topRight: Radius.circular(cornerRadius))),
       builder: (_) {
         return Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height * heightFactor,
+          height: MediaQuery.of(context).size.height * heightFactor,
           child: Column(
             children: <Widget>[
               SizedBox(height: 12),
@@ -84,7 +83,8 @@ Future<Country?> showCountryPickerSheet(BuildContext context,
       });
 }
 
-Future<Country?> showCountryPickerDialog(BuildContext context, {
+Future<Country?> showCountryPickerDialog(
+  BuildContext context, {
   Widget? title,
   double cornerRadius: 35,
   bool focusSearchBox: false,
@@ -92,12 +92,11 @@ Future<Country?> showCountryPickerDialog(BuildContext context, {
   return showDialog<Country?>(
       context: context,
       barrierDismissible: true,
-      builder: (_) =>
-          Dialog(
+      builder: (_) => Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(cornerRadius),
-                )),
+              Radius.circular(cornerRadius),
+            )),
             child: Column(
               children: <Widget>[
                 SizedBox(height: 16),

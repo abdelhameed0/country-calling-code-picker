@@ -150,65 +150,88 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
       children: <Widget>[
         Container(
           margin: const EdgeInsets.only(left: 16, right: 16),
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          decoration: BoxDecoration(
-              color: Color(0xFFF7F7F5),
-              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-              border: Border.all(
-                color: _borderColor,
-                width: 1.0,
-              )),
-          child: TextField(
-            focusNode: _focusNode,
-            style: widget.searchInputStyle,
-            autofocus: widget.focusSearchBox,
-            decoration: widget.searchInputDecoration ??
-                InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: _controller.text.isNotEmpty
-                        ? Color(0xFF121212)
-                        : Color(0xFFA7A7A7),
-                    size: 24,
-                  ),
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 32,
-                  ),
-                  suffixIcon: Visibility(
-                    visible: _controller.text.isNotEmpty,
-                    child: InkWell(
-                      child: Icon(
-                        Icons.clear,
-                        color: _controller.text.isNotEmpty
-                            ? Color(0xFF121212)
-                            : Color(0xFFA7A7A7),
-                        size: 20,
-                      ),
-                      onTap: () => setState(() {
-                        _controller.clear();
-                        _filteredList.clear();
-                        _filteredList.addAll(_list);
-                      }),
+          height: 56.0,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF7F7F5),
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                    border: Border.all(
+                      color: _borderColor,
+                      width: 1.0,
                     ),
                   ),
-                  border: UnderlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                    borderSide: BorderSide(
-                      width: 0.0,
-                      style: BorderStyle.none,
-                    ),
+                  child: TextField(
+                    focusNode: _focusNode,
+                    style: widget.searchInputStyle,
+                    autofocus: widget.focusSearchBox,
+                    decoration: widget.searchInputDecoration ??
+                        InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: _controller.text.isNotEmpty
+                                ? Color(0xFF121212)
+                                : Color(0xFFA7A7A7),
+                            size: 24,
+                          ),
+                          prefixIconConstraints: BoxConstraints(
+                            minWidth: 32,
+                          ),
+                          suffixIcon: Visibility(
+                            visible: _controller.text.isNotEmpty,
+                            child: InkWell(
+                              child: Icon(
+                                Icons.clear,
+                                color: _controller.text.isNotEmpty
+                                    ? Color(0xFF121212)
+                                    : Color(0xFFA7A7A7),
+                                size: 20,
+                              ),
+                              onTap: () => setState(() {
+                                _controller.clear();
+                                _filteredList.clear();
+                                _filteredList.addAll(_list);
+                              }),
+                            ),
+                          ),
+                          border: UnderlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(12.0)),
+                            borderSide: BorderSide(
+                              width: 0.0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.only(
+                            left: 8,
+                            right: 8,
+                            top: 8,
+                            bottom: 8,
+                          ),
+                          hintText: widget.searchHintText,
+                        ),
+                    textInputAction: TextInputAction.done,
+                    controller: _controller,
+                    onChanged: _onSearch,
                   ),
-                  contentPadding: EdgeInsets.only(
-                    left: 8,
-                    right: 8,
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  hintText: widget.searchHintText,
                 ),
-            textInputAction: TextInputAction.done,
-            controller: _controller,
-            onChanged: _onSearch,
+              ),
+              SizedBox(width: 12.0),
+              GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF121212),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(
@@ -218,7 +241,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
           child: _isLoading
               ? Center(child: CircularProgressIndicator())
               : ListView.separated(
-                  padding: EdgeInsets.only(top: 16),
+                  padding: EdgeInsets.only(top: 16, bottom: 16.0),
                   controller: _scrollController,
                   itemCount: _filteredList.length,
                   separatorBuilder: (_, index) =>
