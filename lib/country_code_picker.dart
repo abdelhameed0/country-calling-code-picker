@@ -158,7 +158,6 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   decoration: BoxDecoration(
                     color: Color(0xFFF7F7F5),
-                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
                     border: Border.all(
                       color: _borderColor,
                       width: 1.0,
@@ -199,7 +198,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                           ),
                           border: UnderlineInputBorder(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(12.0)),
+                                const BorderRadius.all(Radius.circular(4.0)),
                             borderSide: BorderSide(
                               width: 0.0,
                               style: BorderStyle.none,
