@@ -42,13 +42,11 @@ Future<Country?> getCountryByCountryCode(
 
 Future<Country?> showCountryPickerSheet(
   BuildContext context, {
-  Widget? title,
-  Widget? cancelWidget,
-  double cornerRadius = 35,
+  double cornerRadius = 24.0,
   bool focusSearchBox = false,
-  double heightFactor = 0.95,
+  double heightFactor = 0.9,
 }) {
-  assert(heightFactor <= 0.95 && heightFactor >= 0.4,
+  assert(heightFactor <= 0.9 && heightFactor >= 0.4,
       'heightFactor must be between 0.4 and 0.9');
   return showModalBottomSheet<Country?>(
       context: context,
@@ -74,8 +72,8 @@ Future<Country?> showCountryPickerSheet(
               SizedBox(height: 28),
               Expanded(
                 child: CountryPickerWidget(
-                  onSelected: (country) => Navigator.of(context).pop(country),
-                ),
+                    onSelected: (country) => Navigator.of(context).pop(country),
+                    focusSearchBox: focusSearchBox),
               ),
             ],
           ),
@@ -103,6 +101,7 @@ Future<Country?> showCountryPickerDialog(
                 Expanded(
                   child: CountryPickerWidget(
                     onSelected: (country) => Navigator.of(context).pop(country),
+                    focusSearchBox: focusSearchBox,
                   ),
                 ),
               ],
