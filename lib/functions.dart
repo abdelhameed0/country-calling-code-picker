@@ -46,7 +46,7 @@ Future<Country?> showCountryPickerSheet(
   bool focusSearchBox = false,
   double heightFactor = 0.9,
 }) {
-  assert(heightFactor <= 0.9 && heightFactor >= 0.4,
+  assert(heightFactor <= 1.0 && heightFactor >= 0.4,
       'heightFactor must be between 0.4 and 0.9');
   return showModalBottomSheet<Country?>(
       context: context,
@@ -60,7 +60,7 @@ Future<Country?> showCountryPickerSheet(
           height: MediaQuery.of(context).size.height * heightFactor,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 12),
+              SizedBox(height: 24.0),
               Container(
                 height: 4.0,
                 width: 40.0,
