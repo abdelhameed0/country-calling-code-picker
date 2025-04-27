@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:country_calling_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 
 import './country.dart';
@@ -84,8 +83,8 @@ Future<Country?> showCountryPickerSheet(
 Future<Country?> showCountryPickerDialog(
   BuildContext context, {
   Widget? title,
-  double cornerRadius: 35,
-  bool focusSearchBox: false,
+  double cornerRadius = 35,
+  bool focusSearchBox = false,
 }) {
   return showDialog<Country?>(
       context: context,
