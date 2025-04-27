@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_sim_country_code:
-    git: git@github.com:maxiakalimit/flutter_sim_country_code.git
+    git: https://github.com/maxiakalimit/flutter_sim_country_code
 
 
 dev_dependencies:
